@@ -1,5 +1,6 @@
 #include "../include/game_stats.hpp"
 
+
 og::GameStats* og::GameStats::instance = nullptr;
 
 
