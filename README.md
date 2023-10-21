@@ -10,6 +10,11 @@ Este repositório é um estrutura base para iniciar o desenvolvimento de um jogo
 
 - **Sistema de Cenas**: O jogo é organizado em cenários (Scene), cada cenário é composto de vários gameObjs.
 
+## Compilar e executar
+
+> make 
+>
+> ./build/apps/main
 
 ## Como Usar
 
