@@ -1,14 +1,14 @@
 # Template para jogos em C++ usando SFML e padrão ECS
 
-Este repositório é um estrutura base para iniciar o desenvolvimento de um jogo de pequeno porte incorporando o padrão ECS (Entity-Component-System) e utilizando a biblioteca SFML (Simple and Fast Multimedia Library). É usado por mim como ponto de partida para jogos em C++.
+Este repositório é um estrutura base para iniciar o desenvolvimento de um jogo de pequeno porte incorporando de forma simplificada o padrão ECS (Entity-Component-System) e utilizando a biblioteca SFML (Simple and Fast Multimedia Library). É usado por mim como ponto de partida para jogos em C++.
 
 ### Recursos Principais
 
-- **ECS**: Implementa de forma simples o padrão [ECS](https://pt.wikipedia.org/wiki/Entity-component-system)
+- **ECS**: Implementa de forma simplificada o padrão [ECS](https://pt.wikipedia.org/wiki/Entity-component-system)
 
-- **SFML**: Implementado com base em [SFML](https://www.sfml-dev.org/) (2.6.0)
+- **SFML**: Usa [SFML](https://www.sfml-dev.org/) (2.6.0)
 
-- **Sistema de Cenas**: O jogo é organizado em cenários (Scene), cada cenário é composto de vários gameObjs.
+- **Sistema de Cenas**: O jogo é organizado em cenários (Scene), cada cenário é composto de vários Components.
 
 ## Compilar e executar
 
@@ -26,7 +26,7 @@ Este repositório é um estrutura base para iniciar o desenvolvimento de um jogo
 
 ## Contribuições
 
-Contribuições são bem-vindas! Sinta-se à vontade para abrir problemas, sugerir melhorias ou enviar solicitações de pull.
+Contribuições são bem-vindas!
 
 ## Licença
 
