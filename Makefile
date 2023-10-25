@@ -8,6 +8,7 @@ TARGET   := main
 INCLUDE  := -Iinclude/
 SRC      :=                      \
    $(wildcard src/*/*.cpp) \
+   $(wildcard src/*/*/*.cpp) \
    $(wildcard src/*.cpp) \
 
 OBJECTS  := $(SRC:%.cpp=$(OBJ_DIR)/%.o)

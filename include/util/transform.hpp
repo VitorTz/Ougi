@@ -1,6 +1,8 @@
-#ifndef OUGI_GE_TRANSFORM_HPP
-#define OUGI_GE_TRANSFORM_HPP
+#pragma once
+#ifndef OUGI_TRANSFORM_HPP
+#define OUGI_TRANSFORM_HPP
 #include <SFML/System/Vector2.hpp>
+#include <cmath>
 #include <cstdlib>
 
 
@@ -11,20 +13,26 @@ namespace og {
         public:
 
             Transform();
-            Transform(std::size_t zIndex);
-            Transform(const sf::Vector2f& position, const sf::Vector2f& direction, float speed, float rotation, float scale, std::size_t zIndex);
-            Transform(const sf::Vector2f& position, float speed, std::size_t zIndex);
-            sf::Vector2f position;
-            sf::Vector2f direction;
-            float speed;
-            float rotation;
-            float scale;
+            Transform(const std::size_t zIndex);
+            Transform(const sf::Vector2f& position, const std::size_t zIndex);
+            Transform(const sf::Vector2f& position, const sf::Vector2f& direction, const std::size_t zIndex);
+            Transform(
+                const sf::Vector2f& position,
+                const sf::Vector2f& direction,
+                const sf::Vector2f& scale,
+                const float rotation,
+                const float speed,
+                const std::size_t zIndex
+            );
+            sf::Vector2f position, direction, scale;            
+            float rotation, speed;
             std::size_t zIndex;
 
-            sf::Vector2f move(double dt);
-            sf::Vector2f move(const sf::Vector2f& v);
+            void normalizeVector(sf::Vector2f& v);
+            const sf::Vector2f move(const double dt);
+            const sf::Vector2f move(const sf::Vector2f& v);
 
-    }; 
+    };
     
 } // namespace og
 

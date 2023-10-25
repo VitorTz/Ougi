@@ -2,7 +2,8 @@
 
 
 int main() {
-    og::Window w;
-    w.run();
+    og::Window* w = og::Window::getInstance();
+    w->run();
+    delete w;
     return 0;
 }

@@ -1,28 +1,29 @@
-#ifndef CPP_GAME_CONSTANTS_HPP
-#define CPP_GAME_CONSTANTS_HPP
-#include <SFML/Graphics.hpp>
+#pragma once
+#ifndef OUGI_CONSTANTS_HPP
+#define OUGI_CONSTANTS_HPP
 #include <string>
 
 
 namespace og {
 
-    // window
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
-    const sf::Vector2f screenSize(screenWidth, screenHeight);
-    const sf::Vector2f screenCenter(screenWidth / 2, screenHeight / 2);
-    const std::string screenTitle = "Game!";
-    const int screenFps = 60;
 
-    // color
-    const sf::Color windowBgColor = sf::Color::Black;
+    const int SCREEN_WIDTH = 1280;
+    const int SCREEN_HEIGHT = 720;
+    const std::string SCREEN_TITLE = "Ougi!";
+    const int fps = 60;
+    const std::string SCREEN_ICON = "res/icon/Ougi.png";
 
-    // res
-    const std::string icon = "res/icon/gamepad.png";
-
-    // enum 
+    // enum
     enum class SceneId {
         Level
+    };
+
+    enum class ImageId {
+        Icon
+    };
+
+    const std::map<og::ImageId, std::string> imagePathById = {
+        {og::ImageId::Icon, "res/icon/Ougi.png"}
     };
     
 } // namespace og

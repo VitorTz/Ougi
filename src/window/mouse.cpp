@@ -23,33 +23,37 @@ og::Mouse::~Mouse() {
 }
 
 
-void og::Mouse::changeMouseBtnStatus(std::pair<bool, bool>& m, bool status) {
+void og::Mouse::updateBtnStatus(std::pair<bool, bool>& btn, bool status) {
     if (!status) {
-        m.first = m.second = false;
+        btn.first = btn.second = false;
         return;
-    } 
-    m.first = !m.second;
-    if (!m.second) m.second = true;
+    }
+    if (!btn.second) {
+        btn.first = true;
+        btn.second = true;
+        return;
+    }
+    btn.first = false;
 }
 
 
 void og::Mouse::update(sf::RenderWindow& window) {
     this->mousePos = sf::Mouse::getPosition(window);
-    this->changeMouseBtnStatus(this->leftBtn, sf::Mouse::isButtonPressed(sf::Mouse::Left));
-    this->changeMouseBtnStatus(this->rightBtn, sf::Mouse::isButtonPressed(sf::Mouse::Right));
-}
-
-
-bool og::Mouse::isLeftBtnClicked() {
-    return this->leftBtn.first;
-}
-
-
-bool og::Mouse::isRightBtnClicked() {
-    return this->rightBtn.first;
+    this->updateBtnStatus(this->leftBtn, sf::Mouse::isButtonPressed(sf::Mouse::Left));
+    this->updateBtnStatus(this->rightBtn, sf::Mouse::isButtonPressed(sf::Mouse::Right));
 }
 
 
 const sf::Vector2i& og::Mouse::getMousePos() {
     return this->mousePos;
+}
+
+
+bool og::Mouse::leftBtnIsPressed() {
+    return this->leftBtn.first;
+}
+
+
+bool og::Mouse::rightBtnIsPressed() {
+    return this->rightBtn.first;
 }

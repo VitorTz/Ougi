@@ -1,17 +1,9 @@
-#ifndef CPP_GAME_SCENES_HPP
-#define CPP_GAME_SCENES_HPP
-#include "scene.hpp"
+#pragma once
+#ifndef OUGI_SCENES_HPP
+#define OUGI_SCENES_HPP
+
+
 #include "level.hpp"
-
-
-namespace og {
-    
-    const og::SceneId mainScene = og::SceneId::Level;
-
-    
-} // namespace og
-
-
 
 
 #endif

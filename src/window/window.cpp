@@ -1,59 +1,61 @@
 #include "../../include/window/window.hpp"
 
 
+
+og::Window* og::Window::instance = nullptr;
+
+
+og::Window* og::Window::getInstance() {
+    if (!instance) {
+        instance = new og::Window();
+    }
+    return instance;
+}
+
+
 og::Window::Window()
 : window(
-    sf::VideoMode(og::screenWidth, og::screenHeight),
-    og::screenTitle,
+    sf::VideoMode(og::SCREEN_WIDTH, og::SCREEN_HEIGHT),
+    og::SCREEN_TITLE,
     sf::Style::Close | sf::Style::Titlebar
 ) {
-    this->window.setFramerateLimit(og::screenFps);
-    this->centralizeWindow();
-    this->loadWindowIcon();    
-    this->changeScene(og::mainScene);
+    this->window.setFramerateLimit(og::fps);
+    sf::Image icon;
+    icon.loadFromFile(og::imagePathById.at(og::ImageId::Icon));
+    sf::Vector2u iconSize = icon.getSize();
+    this->window.setIcon(iconSize.x, iconSize.y, icon.getPixelsPtr());
+    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
+    this->window.setPosition(
+        sf::Vector2i(
+            desktop.width / 2 - og::SCREEN_WIDTH / 2,
+            desktop.height / 2 - og::SCREEN_HEIGHT / 2
+        )
+    );
+
+    this->changeScene = [this](const og::SceneId& sceneId) {
+        if (this->scene->getSceneId() != sceneId) {
+            delete this->scene;
+            switch (sceneId) {
+                case og::SceneId::Level:
+                    this->scene = new og::Level(this->changeScene);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    this->scene = new og::Level(this->changeScene);
+
 }
 
 
 og::Window::~Window() {
-    delete og::gameStats;    
     delete this->scene;
-}
-
-
-void og::Window::centralizeWindow() {
-    sf::VideoMode desktop = sf::VideoMode::getDesktopMode();
-    this->window.setPosition(
-        sf::Vector2i(
-            desktop.width / 2 - og::screenWidth / 2,
-            desktop.height / 2 - og::screenHeight / 2
-        )
-    );
-}
-
-
-void og::Window::loadWindowIcon() {
-    sf::Image iconImage;
-    if (!iconImage.loadFromFile(og::icon)) {
-        std::cerr << "Game Icon not Founded!\n";
-        og::gameStats->quitGame();
-        return;
-    }
-    sf::Vector2u iconSize = iconImage.getSize();
-    this->window.setIcon(iconSize.x, iconSize.y, iconImage.getPixelsPtr());
-}
-
-
-void og::Window::changeScene(og::SceneId sceneId) {    
-    if (this->scene == nullptr || this->scene->getSceneId() != sceneId) {
-        delete this->scene;
-        switch (sceneId) {
-            case og::SceneId::Level:
-                this->scene = new og::Level([this](og::SceneId sceneId){this->changeScene(sceneId);});
-                break;
-            default:
-                break;
-        }
-    }   
+    delete og::keyboard;
+    delete og::gameStats;
+    delete og::mouse;
+    delete og::assetPool;
 }
 
 
@@ -69,7 +71,7 @@ void og::Window::handleInput() {
                 break;
             case sf::Event::KeyReleased:
                 og::keyboard->releaseKey(e.key.code);
-                break;
+                break;                
             default:
                 break;
         }
@@ -79,24 +81,24 @@ void og::Window::handleInput() {
 
 void og::Window::update() {
     const double dt = this->clock.restart().asSeconds();
-    og::gameStats->updateTimeElapsed(dt);
+    og::gameStats->elapsedTime += dt;
     og::mouse->update(this->window);
     this->scene->update(dt);
+    og::keyboard->update();    
 }
 
 
-void og::Window::render() {
-    this->window.clear(og::windowBgColor);
+void og::Window::draw() {
+    this->window.clear();
     this->scene->draw(this->window);
     this->window.display();
 }
 
 
 void og::Window::run() {
-    while (this->window.isOpen() && og::gameStats->isGameRunning()) {
+    while (this->window.isOpen()) {
         this->handleInput();
         this->update();
-        this->render();
-        og::keyboard->clearInputs();
+        this->draw();
     }
 }

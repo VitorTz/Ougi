@@ -1,4 +1,4 @@
-# Template para jogos em C++ usando SFML e padrão ECS
+# Ougi é uma "Game Engine" para jogos em C++ usando SFML e padrão ECS
 
 Este repositório é um estrutura base para iniciar o desenvolvimento de um jogo de pequeno porte incorporando de forma simplificada o padrão ECS (Entity-Component-System) e utilizando a biblioteca SFML (Simple and Fast Multimedia Library). É usado por mim como ponto de partida para jogos em C++.
 
@@ -9,6 +9,10 @@ Este repositório é um estrutura base para iniciar o desenvolvimento de um jogo
 - **SFML**: Usa [SFML](https://www.sfml-dev.org/) (2.6.0)
 
 - **Sistema de Cenas**: O jogo é organizado em cenários (Scene), cada cenário é composto de vários Components.
+
+## Dependências
+
+> g++ make libsfml-dev
 
 ## Compilar e executar
 

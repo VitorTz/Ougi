@@ -1,14 +1,12 @@
 #include "../../include/util/transform.hpp"
 
 
-og::Transform::Transform() 
-: rotation(0.f), scale(1.f), zIndex(0) {
+og::Transform::Transform(
 
-}
-
-
-og::Transform::Transform(std::size_t zIndex) 
-: rotation(0.f), scale(1.f), zIndex(zIndex) {
+) : scale(1.f, 1.f),
+    rotation(0),
+    speed(0),
+    zIndex(0) {
 
 }
 
@@ -16,41 +14,77 @@ og::Transform::Transform(std::size_t zIndex)
 og::Transform::Transform(
     const sf::Vector2f& position,
     const sf::Vector2f& direction,
-    float speed,
-    float rotation,
-    float scale,
-    std::size_t zIndex
+    const sf::Vector2f& scale,
+    const float rotation,
+    const float speed,
+    const std::size_t zIndex
 ) : position(position),
     direction(direction),
-    speed(speed),
-    rotation(rotation),
     scale(scale),
-    zIndex(zIndex) {
-
-}
-
-
-og::Transform::Transform(const sf::Vector2f& position, float speed, std::size_t zIndex)
-:   position(position),
+    rotation(rotation),
     speed(speed),
-    scale(1.f),
+    zIndex(zIndex) {
+    
+}
+
+
+og::Transform::Transform(
+    const std::size_t zIndex
+) : scale(1.f, 1.f),
+    rotation(0),
+    speed(0),
     zIndex(zIndex) {
 
 }
 
 
-sf::Vector2f og::Transform::move(double dt) {
-    float deltaX = this->direction.x * dt * this->speed;
-    float deltaY = this->direction.y * dt * this->speed;
-    this->position.x += deltaX;
-    this->position.y += deltaY;
-    return {deltaX, deltaY};
+og::Transform::Transform(
+    const sf::Vector2f& position,
+    const std::size_t zIndex
+) : position(position),
+    scale(1.f, 1.f),
+    rotation(0),
+    speed(0),
+    zIndex(zIndex) {
+
 }
 
 
-sf::Vector2f og::Transform::move(const sf::Vector2f& v) {
+og::Transform::Transform(
+    const sf::Vector2f& position,
+    const sf::Vector2f& direction,
+    const std::size_t zIndex
+) : position(position),
+    direction(direction),
+    scale(1.f, 1.f),
+    rotation(0),
+    speed(0),
+    zIndex(zIndex) {
+
+}
+
+
+const sf::Vector2f og::Transform::move(const double dt) {
+    this->normalizeVector(this->direction);
+    const double dX = this->direction.x * dt * this->speed;
+    const double dY = this->direction.y * dt * this->speed;
+    this->position.x += dX;
+    this->position.y += dY;
+    return sf::Vector2f(dX, dY);
+}
+
+
+const sf::Vector2f og::Transform::move(const sf::Vector2f& v) {
     this->position.x += v.x;
     this->position.y += v.y;
-    return {v.x, v.y};
+    return sf::Vector2f(v.x, v.y);
 }
 
+
+void og::Transform::normalizeVector(sf::Vector2f& v) {
+    double magnitude = std::sqrt(v.x * v.x + v.y * v.y);
+    if (magnitude > 1) {
+        v.x /= magnitude;
+        v.y /= magnitude;
+    }
+}

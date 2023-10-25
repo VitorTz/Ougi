@@ -1,56 +1,72 @@
-#ifndef OUGI_GE_ECS_HPP
-#define OUGI_GE_ECS_HPP
-#include <map>
+#pragma once
+#ifndef OUGI_ECS_HPP
+#define OUGI_ECS_HPP
+#include <SFML/Graphics.hpp>
 #include <iostream>
-#include "../constants.hpp"
-#include "../globals.hpp"
-#include "../game_stats.hpp"
 #include "../util/transform.hpp"
+#include "../util/asset_pool.hpp"
+#include "../util/timer.hpp"
+#include "../globals.hpp"
+#include <map>
+#include <string>
 
 
 namespace og {
 
     class Component;
+    class GameObj;
 
-    class GameObj {
+    class Group {
 
         private:
             std::map<std::string, og::Component*> components;
-            const std::string name;
-        
-        public:
-            og::Transform transform;
 
         public:
-
-            GameObj(const std::string& name);
-            GameObj(const std::string& name, og::Transform transform);
-            ~GameObj();
-            void update(double dt);
+            Group();
+            ~Group();
+            void add(og::Component* component);
+            void add(og::Component* component, og::GameObj* gameObj);
+            bool rmv(const std::string& componentName);
+            bool constains(const std::string& componentName);
+            og::Component* get(const std::string& componentName);
+            void update(const double dt);
             void draw(sf::RenderWindow& window);
-            void addComponent(og::Component* component);
-            void rmvComponent(const std::string& componentName);
-            og::Component* getComponent(const std::string& componentName);
-            const std::string& getName();
 
     };
 
 
     class Component {
 
-        protected:
+        private:
             const std::string name;
+        
+        protected:
             og::GameObj* gameObj;
 
         public:
             Component(const std::string& name);
             virtual ~Component();
-            virtual void update(double dt);
+            virtual void update(const double dt);
             virtual void draw(sf::RenderWindow& window);
             virtual void setGameObj(og::GameObj* gameObj);
             const std::string& getName();
+            og::Group group;
+        
+    };
 
-    };  
+
+    class GameObj : public og::Component {
+
+        public:
+
+            GameObj(const std::string& name);
+            GameObj(const std::string& name, const og::Transform transform);
+            ~GameObj();
+            void update(const double dt) override;
+            og::Transform transform;
+        
+
+    };
     
 } // namespace og
 

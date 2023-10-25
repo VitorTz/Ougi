@@ -1,44 +1,37 @@
-#ifndef CPP_GAME_SCENE_HPP
-#define CPP_GAME_SCENE_HPP
+#pragma once
+#ifndef OUGI_SCENE_HPP
+#define OUGI_SCENE_HPP
 #include <SFML/Graphics.hpp>
-#include <iostream>
 #include <functional>
-#include <map>
 #include "../constants.hpp"
-#include "../globals.hpp"
-#include "../game_stats.hpp"
-#include "../ecs/components.hpp"
-#include "../util/camera.hpp"
+#include "../ecs/components/components.hpp"
+#include "../window/camera.hpp"
 
 
 namespace og {
 
+
     class Scene {
-        
-        protected:
 
+        private:
             og::SceneId sceneId;
-            std::function<void(og::SceneId)> changeScene;
-            std::map<std::string, og::GameObj*> gameObjs;
-            og::Camera camera;
-
-        protected:
         
-            void addGameObj(og::GameObj* gameObj, const bool addToCamera);
-            og::GameObj* getGameObj(const std::string& gameObjName); 
-            void rmvGameObj(const std::string& gameObjName);
+        protected:
+            std::function<void(const og::SceneId&)> changeScene;
+            og::Camera camera;
+            og::Group gameObjs;
 
         public:
-
-            Scene(og::SceneId sceneId, std::function<void(og::SceneId)> changeScene);
+            Scene(const og::SceneId& sceneId, std::function<void(const og::SceneId&)> changeScene);
             virtual ~Scene();
-            virtual void update(double dt);
-            virtual void draw(sf::RenderWindow& window);
+            virtual void update(const double dt);
+            virtual void draw(sf::RenderWindow& window);            
             const og::SceneId& getSceneId();
 
     };
     
 } // namespace og
+
 
 
 #endif

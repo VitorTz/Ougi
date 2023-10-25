@@ -1,5 +1,10 @@
-#ifndef CPP_GAME_WINDOW_HPP
-#define CPP_GAME_WINDOW_HPP
+#pragma once
+#ifndef OUGI_WINDOW_HPP
+#define OUGI_WINDOW_HPP
+#include <SFML/Graphics.hpp>
+#include <iostream>
+#include "../constants.hpp"
+#include "../globals.hpp"
 #include "../scene/scenes.hpp"
 
 
@@ -8,24 +13,25 @@ namespace og {
     class Window {
 
         private:
+            static Window* instance;
+        public:
+            static Window* getInstance();
 
+        private:
             sf::RenderWindow window;
             sf::Clock clock;
             og::Scene* scene;
-            void changeScene(og::SceneId sceneId);
-            void centralizeWindow();
-            void loadWindowIcon();
+            std::function<void(const og::SceneId&)> changeScene;
+            Window();
             void handleInput();
             void update();
-            void render();
-
+            void draw();
+            
         public:
-        
-            Window();
             ~Window();
             void run();
-
-    };  
+        
+    };
     
 } // namespace og
 
