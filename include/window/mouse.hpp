@@ -1,7 +1,7 @@
-#pragma once
 #ifndef OUGI_MOUSE_HPP
 #define OUGI_MOUSE_HPP
 #include <SFML/Graphics.hpp>
+#include <map>
 
 
 namespace og {
@@ -18,19 +18,23 @@ namespace og {
             ~Mouse();
         
         private:
-            sf::Vector2i mousePos;
-            std::pair<bool, bool> leftBtn;
-            std::pair<bool, bool> rightBtn;
-            void updateBtnStatus(std::pair<bool, bool>& btn, bool status);
-        
-        public:
-            void update(sf::RenderWindow& window);
-            const sf::Vector2i& getMousePos();
-            bool leftBtnIsPressed();
-            bool rightBtnIsPressed();
+            bool mousePressed;
+            bool mouseDragged;
+            sf::Vector2f mousePos;
+            sf::Vector2f mouseDelta;
+            std::map<sf::Mouse::Button, bool> buttons;
 
+        public:
+            void update(sf::RenderWindow& window);        
+
+        public:
+            const sf::Vector2f& getMousePos();
+            const sf::Vector2f& getMouseDelta();
+            bool buttonStatus(const sf::Mouse::Button& mouseButton);
+            bool isMouseDragged();
 
     };
+
     
 } // namespace og
 
