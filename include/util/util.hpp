@@ -6,7 +6,6 @@
 
 namespace og {
 
-
     void printVector(const sf::Vector2f& v);
     void printVector(const sf::Vector2i& v);
     void printVector(const sf::Vector2u& v);

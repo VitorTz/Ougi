@@ -4,7 +4,9 @@
 #include <iostream>
 #include "../constants.hpp"
 #include "../globals.hpp"
+#include "../game_stats.hpp"
 #include "../util/util.hpp"
+#include "../scene/scenes.hpp"
 
 
 namespace og {
@@ -23,9 +25,11 @@ namespace og {
         private:
             sf::RenderWindow window;
             sf::Clock clock;
+            og::Scene* scene;
+            std::function<void(const og::SceneId&)> changeScene;
         
         private:
-            void initScreenIcon();
+            void setUpWindow();            
             void handleInput();
             void update();
             void draw();
