@@ -131,25 +131,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="KeyListener.cpp" />
+    <ClCompile Include="LevelEditorScene.cpp" />
+    <ClCompile Include="LevelScene.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseListener.cpp" />
     <ClCompile Include="OugiConfig.hpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="util.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Color.hpp" />
     <ClInclude Include="Drawable.hpp" />
-    <ClInclude Include="KeyboardListener.hpp" />
     <ClInclude Include="KeyListener.hpp" />
     <ClInclude Include="MouseListener.hpp" />
-    <ClInclude Include="Platform.hpp" />
     <ClInclude Include="Scene.hpp" />
     <ClInclude Include="SceneID.hpp" />
     <ClInclude Include="Side.hpp" />
     <ClInclude Include="util.hpp" />
     <ClInclude Include="Vector.hpp" />
-    <ClInclude Include="Vertex.hpp" />
     <ClInclude Include="Window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

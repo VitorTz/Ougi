@@ -5,7 +5,6 @@
 #include "Side.hpp"
 #include "Vector.hpp"
 #include "Color.hpp"
-#include "Vertex.hpp"
 
 
 namespace og {

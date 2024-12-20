@@ -1,13 +1,10 @@
 #include "KeyListener.hpp"
+#include <array>
 #include <cassert>
 
 
-static og::KeyListener k_listener{};
-
-
-const og::KeyListener* og::get_key_listener() {
-	return &k_listener;
-}
+static std::array<bool, GLFW_KEY_LAST + 1> down_keys{};
+static std::array<bool, GLFW_KEY_LAST + 1> pressed_keys{};
 
 
 void og::key_listener_key_callback(
@@ -17,26 +14,27 @@ void og::key_listener_key_callback(
 	const int action,
 	const int mods
 ) {	
+	assert(key <= GLFW_KEY_LAST && "INVALID KEYBOARD KEY!");
 	const bool s = action == GLFW_PRESS;
-	k_listener.down_keys[key] = s;
-	k_listener.pressed_keys[key] = s;
+	down_keys[key] = s;
+	pressed_keys[key] = s;
 }
 
 
 bool og::key_listener_is_key_pressed(const int key) {
 	assert(key <= GLFW_KEY_LAST && "INVALID KEYBOARD KEY!");
-	return k_listener.pressed_keys[key];
+	return pressed_keys[key];
 }
 
 
 bool og::key_listener_is_key_down(const int key) {
 	assert(key <= GLFW_KEY_LAST && "INVALID KEYBOARD KEY!");
-	return k_listener.down_keys[key];
+	return down_keys[key];
 }
 
 
-void og::key_listener_default_end_frame() {
-	for (bool& b : k_listener.pressed_keys) {
+void og::key_listener_end_frame() {
+	for (bool& b : pressed_keys) {
 		b = false;
 	}
 }

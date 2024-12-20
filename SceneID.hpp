@@ -4,7 +4,8 @@
 namespace og {
 
 	enum SceneID {
-
+		LevelEditorSceneID,
+		LevelSceneID
 	};
 
 }

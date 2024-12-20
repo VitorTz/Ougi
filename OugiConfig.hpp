@@ -1,5 +1,5 @@
 #pragma once
-#include "Platform.hpp"
+#include "SceneID.hpp"
 
 
 namespace og {
@@ -9,8 +9,8 @@ namespace og {
 		constexpr int DEFAULT_SCREEN_W{ 1280 };
 		constexpr int DEFAULT_SCREEN_H{ 720 };
 		constexpr char WINDOW_TITLE[]{ "Ougi" };
-
-		constexpr og::Platform PLATFORM{ og::Desktop };
+		
+		constexpr og::SceneID MAIN_SCENE{ og::LevelSceneID };
 
 	}
 

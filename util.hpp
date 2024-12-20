@@ -2,14 +2,13 @@
 #include <array>
 #include <vector>
 #include <iostream>
-#include <random>
 #include "Vector.hpp"
-#include "Color.hpp"
 
 
 namespace og {
 
-    int randint(int start, int end);    
+    int randint(int start, int end);
+
     long long randlong(long long start, long long end);
 
     template<typename T, std::size_t size>
@@ -31,6 +30,5 @@ namespace og {
     void print_vec(const og::Vector2<T>& v) {
         std::cout << "Vec(" << v.x << ',' << ' ' << v.y << ')' << '\n';
     }
-
 
 }
