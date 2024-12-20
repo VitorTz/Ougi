@@ -1,5 +1,5 @@
 #include "MouseListener.hpp"
-
+#include <cassert>
 
 static og::MouseListener m_listener{};
 
@@ -9,17 +9,13 @@ const og::MouseListener* og::get_mouse_listener() {
 }
 
 
-void og::mouse_default_pos_callback(
-	GLFWwindow* window, 
-	const double xpos,
-	const double ypos
-) {
+void og::mouse_default_pos_callback(GLFWwindow* window, const double xpos, const double ypos) {
 	m_listener.mouse_last_pos = m_listener.mouse_pos;
 	m_listener.mouse_pos = { xpos, ypos };
 	m_listener.mouse_delta_pos = m_listener.mouse_pos - m_listener.mouse_last_pos;
 	for (bool& b : m_listener.mouse_button_pressed) {
 		if (b) {
-			m_listener.mouse_dragging = true;
+			m_listener.is_mouse_dragged = true;
 			break;
 		}
 	}
@@ -31,10 +27,9 @@ void og::mouse_default_button_callback(
 	const int button, 
 	const int action, 
 	const int mods
-) {
-	if (button > GLFW_MOUSE_BUTTON_LAST) { return; }
+) {		
 	m_listener.mouse_button_pressed[button] = action == GLFW_PRESS;
-	m_listener.mouse_dragging = action == GLFW_RELEASE ? false : m_listener.mouse_dragging;
+	m_listener.is_mouse_dragged = action == GLFW_RELEASE ? false : m_listener.is_mouse_dragged;
 }
 
 
@@ -49,6 +44,71 @@ void og::mouse_default_end_frame() {
 }
 
 
-bool og::is_mouse_button_pressed(const int button) {
-	return button <= GLFW_MOUSE_BUTTON_LAST && m_listener.mouse_button_pressed[button];
+bool og::mouse_is_btn_pressed(const int button) {
+	assert(button <= GLFW_MOUSE_BUTTON_LAST);
+	return m_listener.mouse_button_pressed[button];
+}
+
+
+const og::Vector2d& og::mouse_get_pos() {
+	return m_listener.mouse_pos;
+}
+
+double og::mouse_get_posX() {
+	return m_listener.mouse_pos.x;
+}
+
+
+double og::mouse_get_posY() {
+	return m_listener.mouse_pos.y;
+}
+
+
+const og::Vector2d& og::mouse_get_scroll() {
+	return m_listener.mouse_scrool;
+}
+
+
+double og::mouse_get_scrollX() {
+	return m_listener.mouse_scrool.x;
+}
+
+
+double og::mouse_get_scrollY() {
+	return m_listener.mouse_scrool.y;
+}
+
+
+const og::Vector2d& og::mouse_get_delta_pos() {
+	return m_listener.mouse_delta_pos;
+}
+
+
+double og::mouse_get_delta_posX() {
+	return m_listener.mouse_delta_pos.x;
+}
+
+
+double og::mouse_get_delta_posY() {
+	return m_listener.mouse_delta_pos.y;
+}
+
+
+const og::Vector2d& og::mouse_get_last_pos() {
+	return m_listener.mouse_last_pos;
+}
+
+
+double og::mouse_get_last_posX() {
+	return m_listener.mouse_last_pos.x;
+}
+
+
+double og::mouse_get_last_posY() {
+	return m_listener.mouse_last_pos.y;
+}
+
+
+bool og::mouse_is_dragged() {
+	return m_listener.is_mouse_dragged;
 }

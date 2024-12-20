@@ -48,7 +48,6 @@ namespace og {
 	constexpr og::Color RED{ 1.0f, 0.0f, 0.0f, 1.0f };
 	constexpr og::Color GREEN{ 0.0f, 1.0f, 0.0f, 1.0f };
 	constexpr og::Color BLUE{ 0.0f, 0.0f, 1.0f, 1.0f };
-
 	constexpr og::Color DARK_TEAL{ 0x1A535C };
 	constexpr og::Color MINT_GREEN{ 0x4ECDC4 };
 	constexpr og::Color SOFT_WHITE{ 0xF7FFF7 };

@@ -1,7 +1,9 @@
 #pragma once
 #include <array>
 #include <vector>
+#include <iostream>
 #include <random>
+#include "Vector.hpp"
 #include "Color.hpp"
 
 
@@ -23,6 +25,11 @@ namespace og {
     template<typename T, std::size_t size>
     const T* rand_choice(const T* arr) {
         return arr + og::randint(0, size - 1);
+    }
+
+    template<typename T>
+    void print_vec(const og::Vector2<T>& v) {
+        std::cout << "Vec(" << v.x << ',' << ' ' << v.y << ')' << '\n';
     }
 
 

@@ -46,12 +46,14 @@ void og::window_init() {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	glEnable(GL_DEPTH_TEST);
-
-	// Callback
 	
+	// Mouse Callback
 	glfwSetCursorPosCallback(window.gl_window, og::mouse_default_pos_callback);
 	glfwSetMouseButtonCallback(window.gl_window, og::mouse_default_button_callback);
 	glfwSetScrollCallback(window.gl_window, og::mouse_default_scroll_callback);
+
+	// Key Callback
+	glfwSetKeyCallback(window.gl_window, og::key_listener_key_callback);
 
 	// Make window visible
 	glfwShowWindow(window.gl_window);
@@ -109,7 +111,8 @@ void og::window_mainloop() {
 						og::rand_choice(og::ALL_COLORS)
 					}
 				);
-			}*/
+			}*/			
+
 
 		// Clear background and update viewport && perspective			
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			
