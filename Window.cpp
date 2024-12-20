@@ -1,132 +1,154 @@
-#include <Windows.h>
-#include "Window.hpp"
-#include "Drawable.hpp"
-#include <gl/GLU.h>
+#include <array>
 #include <chrono>
+#include <Windows.h>
+#include <gl/GLU.h>
 #include <iostream>
+#include "Window.hpp"
+#include "OugiConfig.hpp"
+#include "Drawable.hpp"
+#include "Vector.hpp"
 #include "util.hpp"
 
 
-static GLFWwindow* gl_window{};
-static og::Color background_color{};
-static int window_w{ 1280 };
-static int window_h{ 720 };
-static const char window_title[]{ "Ougi" };
-static double dt{};
-
-
-
-static void window_resize() {
-	const float aspect = (float) window_w / (float)window_h ;
-	glViewport(0, 0, window_w, window_h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(45.0, aspect, 0.1, 500);	
-	glMatrixMode(GL_MODELVIEW);
-}
+// Window
+static og::OugiWindow window{};
 
 
 void og::window_init() {
 	if (!glfwInit()) {
 		std::exit(EXIT_FAILURE);
 	}
-
+	
+	// Window Hints
 	glfwDefaultWindowHints();
 	glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-	gl_window = glfwCreateWindow(window_w, window_h, window_title, NULL, NULL);
+	// Create Window
+	window.gl_window = glfwCreateWindow(og::config::DEFAULT_SCREEN_W, og::config::DEFAULT_SCREEN_H, og::config::WINDOW_TITLE, NULL, NULL);	
 
-	if (!gl_window) {
+	if (!window.gl_window) {
 		glfwTerminate();
 		std::exit(EXIT_FAILURE);
 	}
 
 	// Center Window
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	glfwSetWindowPos(gl_window, mode->width / 2 - window_w / 2, mode->height / 2 - window_h / 2);
+	glfwSetWindowPos(window.gl_window, mode->width / 2 - og::config::DEFAULT_SCREEN_W / 2, mode->height / 2 - og::config::DEFAULT_SCREEN_H / 2);
 
 	// Context
-	glfwMakeContextCurrent(gl_window);
+	glfwMakeContextCurrent(window.gl_window);
 
 	// Enable V-SYNC
 	glfwSwapInterval(1);
 
 	// Background color	
-	glClearColor(background_color.r, background_color.g, background_color.b, background_color.a);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-	glfwShowWindow(gl_window);
+	glEnable(GL_DEPTH_TEST);
 
+	// Callback
+	
+	glfwSetCursorPosCallback(window.gl_window, og::mouse_default_pos_callback);
+	glfwSetMouseButtonCallback(window.gl_window, og::mouse_default_button_callback);
+	glfwSetScrollCallback(window.gl_window, og::mouse_default_scroll_callback);
+
+	// Make window visible
+	glfwShowWindow(window.gl_window);
+
+	// Graphics card info
 	std::cout << "Company: " << glGetString(GL_VENDOR) << '\n';
 	std::cout << "Model: " << glGetString(GL_RENDERER) << '\n';
 	std::cout << "OPENGL Version: " << glGetString(GL_VERSION) << '\n';
 }
 
-void og::window_mainloop() {
-	
-	og::Square square{
-		{
-			og::Vertex3f{-2.5f, -2.5f, 0.0f},
-			og::Vertex3f{2.5f, -2.5f, 0.0f},
-			og::Vertex3f{2.5f, 2.5f, 0.0f},
-			og::Vertex3f{-2.5f, 2.5f, 0.0f}
-		},
-		og::rand_choice(og::ALL_COLORS)
-	};
-	
-	double rotation{ 0.0 };
-	while (!glfwWindowShouldClose(gl_window)) {
-		auto last_frame_time = std::chrono::system_clock::now();
-		rotation -= dt * 100.0;
-		/* Poll for and process events */
-		glfwPollEvents();
 
-		/* Render here */
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		glfwGetFramebufferSize(gl_window, &window_w, &window_h);
-		window_resize();
-
-		glLoadIdentity();
-		glTranslated(0.0, 0.0, -50.0);
-		glRotated(rotation, 1.0, 1.0, 1.0);
-		square.draw();
-
-		/* Swap front and back buffers */
-		glfwSwapBuffers(gl_window);
-		// Get the current time from the system clock		
-		dt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - last_frame_time).count() / 1000.0;
-	}
-
+void og::window_close() {	
 	glfwTerminate();
 }
 
 
-bool og::is_key_pressed(const int key) {
-	return glfwGetKey(gl_window, key);
+inline static void window_end_frame() {
+	og::mouse_default_end_frame();
+	og::key_listener_default_end_frame();
 }
 
 
-void og::window_set_background_color(const og::Color& color) {
-	background_color = color;
-	glClearColor(color.r, color.g, color.b, color.a);
+void og::window_mainloop() {
+	
+	og::Cube cube{ 20.f };
+
+	cube.set_colors(
+		{
+			og::rand_choice(og::ALL_COLORS),
+			og::rand_choice(og::ALL_COLORS),
+			og::rand_choice(og::ALL_COLORS),
+			og::rand_choice(og::ALL_COLORS),
+			og::rand_choice(og::ALL_COLORS),
+			og::rand_choice(og::ALL_COLORS)
+		}
+	);
+
+	double rotation{};	
+	while (!glfwWindowShouldClose(window.gl_window)) {
+		const auto last_frame_time = std::chrono::system_clock::now();		
+		rotation += window.dt * 40.0;
+		
+		// Check event
+			glfwPollEvents();
+
+		// update
+			/*if (og::is_mouse_button_pressed(GLFW_MOUSE_BUTTON_1)) {
+				cube.set_colors(
+					{
+						og::rand_choice(og::ALL_COLORS),
+						og::rand_choice(og::ALL_COLORS),
+						og::rand_choice(og::ALL_COLORS),
+						og::rand_choice(og::ALL_COLORS),
+						og::rand_choice(og::ALL_COLORS),
+						og::rand_choice(og::ALL_COLORS)
+					}
+				);
+			}*/
+
+		// Clear background and update viewport && perspective			
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);			
+			glfwGetFramebufferSize(window.gl_window, &window.width, &window.height);
+			const float aspect = (float)window.width / (float)window.height;
+			glViewport(0, 0, window.width, window.height);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			gluPerspective(45.0, aspect, 0.1, 500);
+			glMatrixMode(GL_MODELVIEW);
+
+		// Draw
+			glLoadIdentity();
+			glTranslated(0.0, 0.0, -50.0);
+			glRotated(rotation, 1.0, 1.0, 0.0);
+			cube.draw();
+
+		// Display		
+			glfwSwapBuffers(window.gl_window);
+
+		// End frame
+			window_end_frame();
+
+		// Update dt		
+			window.dt = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - last_frame_time).count() / 1000.0;
+	}
 }
 
-const og::Color& og::window_get_background_color() {
-	return background_color;
+
+inline int og::window_width() {
+	return window.width;
 }
 
 
-int og::window_width() {
-	return window_w;
+inline int og::window_height() {
+	return window.height;
 }
 
 
-int og::window_height() {
-	return window_h;
-}
-
-
-double og::window_get_deltatime() {
-	return dt;
+inline double og::window_get_deltatime() {
+	return window.dt;
 }
