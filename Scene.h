@@ -1,6 +1,8 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
+#include "Shader.h"
 #include "util.h"
 #include "config.h"
 #include "SceneID.h"
